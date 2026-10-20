@@ -1,0 +1,19 @@
+{
+  "name": "Salat — Prières et Qibla",
+  "short_name": "Salat",
+  "description": "Horaires de prière et direction de la Qibla",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#071b1a",
+  "theme_color": "#0a211f",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
