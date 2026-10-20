@@ -19,7 +19,7 @@
 <div class="eyebrow-row"><button class="location" id="locationButton" title="Changer ou détecter la ville"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s7-7.5 7-12a7 7 0 1 0-14 0c0 4.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg><span id="cityLabel">Lyon, France</span><span class="tiny-arrow">⌄</span></button><span id="dateLabel" class="date-pill">—</span></div>
 <section class="hero" aria-label="Prochaine prière"><div class="hero-decor" aria-hidden="true"><span class="moon">☪</span></div><p class="overline">PROCHAINE PRIÈRE</p><h1 id="nextName">—</h1><div class="next-time" id="nextTime">--:--</div><p class="countdown-title">DANS <strong id="countdown">-- h -- min</strong></p><div class="hero-footer"><span class="hero-line"></span><span>Un moment pour se recentrer</span><span class="hero-line"></span></div></section>
 <section class="prayer-section"><div class="section-header"><h2>Les cinq prières</h2><span id="methodChip" class="method-chip">France · 12°</span></div><div class="prayers" id="prayers" aria-live="polite"></div><p class="micro-note" id="sourceNote">Horaires estimés par calcul astronomique. Consulte les horaires de ta mosquée pour les écarts de convention.</p></section>
-<section class="qibla-section"><div class="section-header"><h2>Direction de la Qibla</h2><span class="method-chip"><span class="dot"></span> La Mecque</span></div><div class="compass-card"><div class="compass-shell" id="compassShell"><div class="compass-rose"><span class="n">N</span><span class="e">E</span><span class="s">S</span><span class="w">O</span><span class="compass-ticks"></span><div class="qibla-arrow" id="qiblaArrow"><span class="arrow-tip">◆</span><span class="arrow-shaft"></span></div><div class="compass-center">✦</div></div></div><strong class="bearing" id="bearing">—°</strong><p id="compassStatus" class="compass-status">Cap théorique depuis ta position</p><button class="secondary-button" id="compassButton">Activer la boussole du téléphone</button><p class="compass-hint">Pose le téléphone à plat, écran vers le ciel et éloigne les objets métalliques. Les lettres N/E/S/O tournent avec le capteur. Vérifie la direction avec une boussole de confiance : le capteur peut être perturbé.</p></div></section>
+<section class="qibla-section"><div class="section-header"><h2>Direction de la Qibla</h2><span class="method-chip"><span class="dot"></span> La Mecque</span></div><div class="compass-card"><div class="compass-shell" id="compassShell"><div class="compass-rose"><span class="n">N</span><span class="e">E</span><span class="s">S</span><span class="w">O</span><span class="compass-ticks"></span><div class="qibla-arrow" id="qiblaArrow"><span class="arrow-tip">◆</span><span class="arrow-shaft"></span></div><div class="compass-center">✦</div></div></div><strong class="bearing" id="bearing">—°</strong><p id="compassStatus" class="compass-status">Cap théorique depuis ta position</p><button class="secondary-button" id="compassButton">Activer la boussole du téléphone</button><p class="compass-hint">Pose le téléphone à plat, écran vers le ciel et éloigne les objets métalliques. La rose tourne si les capteurs sont disponibles. Sans nord fiable, la flèche est atténuée et ne doit pas servir à prier. Vérifie la direction avec une boussole de confiance : le capteur peut être perturbé.</p></div></section>
 <section class="privacy-strip"><span>♧</span><span>Sans compte. Tes coordonnées et tes réglages restent sur cet appareil.</span></section>
 </main>
 <nav class="bottom-nav" aria-label="Navigation"><button class="active" data-nav="prayer"><span>◷</span>Prières</button><button data-nav="qibla"><span>⌖</span>Qibla</button><button data-nav="settings"><span>⚙</span>Réglages</button></nav>
@@ -147,7 +147,7 @@ function updateData(){
  lastDay=dateKey(currentDay);
  today=calculatePrayerTimes(currentDay,state.lat,state.lon,state.method,state.madhab);
  tomorrow=calculatePrayerTimes(datePlusDays(now,1),state.lat,state.lon,state.method,state.madhab);
- bearing=qiblaBearing(state.lat,state.lon);heading=null;sensorLive=false;
+ bearing=qiblaBearing(state.lat,state.lon);heading=null;sensorLive=false;sensorMode='none';
  $('cityLabel').textContent=state.city;
  $('dateLabel').textContent=dateFmt.format(now);
  $('methodChip').textContent=METHODS[state.method].label.split(' / ')[0];
@@ -191,44 +191,69 @@ function tick(){
  }
 }
 function norm(a){return ((a%360)+360)%360}
+// A browser may supply an absolute north reference or only relative rotation.
+// Relative angles move the display but cannot determine the Qibla reliably.
+let sensorMode='none', lastAbsoluteAt=0, orientationStarted=false, compassWatchdog=null;
 function renderCompass(){
- // The compass rose and its N/E/S/O labels must rotate with the real-world north.
-  // The arrow is a child of that rose: their rotations combine to (bearing - heading).
-  // If there is no trusted sensor measurement, both show a fixed theoretical bearing.
-  document.querySelector('.compass-rose').style.transform=`rotate(${norm(-(heading??0))}deg)`;
+ const rose=document.querySelector('.compass-rose');
+ // The arrow is inside the compass rose: screen-relative Qibla = bearing - heading.
+ rose.style.transform=`rotate(${norm(-(heading??0))}deg)`;
  $('qiblaArrow').style.transform=`rotate(${norm(bearing)}deg)`;
+ $('qiblaArrow').style.opacity=sensorMode==='relative'?'0.35':'1';
 }
-function onOrientation(e){
-  // The simple 360-alpha heading is valid with the phone lying approximately flat.
-  // Tilted phones need 3D matrix compensation; refuse to claim a live heading.
-  if ((Number.isFinite(e.beta)&&Math.abs(e.beta)>25) ||
-      (Number.isFinite(e.gamma)&&Math.abs(e.gamma)>25)) {
-    heading=null;sensorLive=false;
-    $('compassStatus').textContent='Mesure suspendue : tiens le téléphone à plat, écran vers le haut.';
-    $('compassButton').textContent='Cap théorique uniquement';renderCompass();return;
-  }
-  let head=null;
- if(typeof e.webkitCompassHeading==='number'&&Number.isFinite(e.webkitCompassHeading)) head=norm(e.webkitCompassHeading);
- else if(e.absolute===true&&typeof e.alpha==='number'&&Number.isFinite(e.alpha)) head=norm(360-e.alpha);
+function onOrientation(e, fromAbsoluteEvent=false){
+ let head=null, absolute=false;
+ if(Number.isFinite(e.webkitCompassHeading) && e.webkitCompassHeading>=0){
+   head=norm(e.webkitCompassHeading);absolute=true;
+ } else if(Number.isFinite(e.alpha)){
+   head=norm(360-e.alpha);
+   absolute=fromAbsoluteEvent||e.absolute===true;
+ }
  if(head===null)return;
-  // The north reference may be magnetic; browser APIs do not provide a guaranteed accuracy.
- heading=head;sensorLive=true;
- $('compassStatus').textContent=`Capteur estimatif · orientation ${Math.round(head)}° (à vérifier)`;
- $('compassButton').textContent='Mesure active · précision non garantie';renderCompass();
+ // Prefer absolute sensors: the ordinary deviceorientation event can be relative.
+ if(!absolute&&sensorMode==='absolute'&&Date.now()-lastAbsoluteAt<3000)return;
+ if(absolute)lastAbsoluteAt=Date.now();
+ sensorMode=absolute?'absolute':'relative';
+ heading=head;
+ sensorLive=absolute;
+ const tilted=(Number.isFinite(e.beta)&&Math.abs(e.beta)>25)||(Number.isFinite(e.gamma)&&Math.abs(e.gamma)>25);
+ if(absolute){
+   $('compassStatus').textContent=`Boussole active · cap ${Math.round(head)}°${tilted?' · incline le téléphone à plat pour fiabiliser':''} · précision non garantie`;
+   $('compassButton').textContent='Boussole active (vérification recommandée)';
+ }else{
+   $('compassStatus').textContent='Mouvement détecté, mais pas de nord fiable : NE PAS utiliser cette flèche pour la prière.';
+   $('compassButton').textContent='Capteur relatif uniquement · orientation non fiable';
+ }
+ renderCompass();
 }
-let orientationStarted=false;
+function beginCompassListening(){
+ if(orientationStarted)return;
+ window.addEventListener('deviceorientationabsolute',e=>onOrientation(e,true),true);
+ window.addEventListener('deviceorientation',e=>onOrientation(e,false),true);
+ orientationStarted=true;
+ $('compassStatus').textContent='Recherche du capteur de direction… Bouge doucement le téléphone.';
+ if(compassWatchdog)clearTimeout(compassWatchdog);
+ compassWatchdog=setTimeout(()=>{
+   if(sensorMode==='none')$('compassStatus').textContent='Aucune mesure reçue. Ouvre ce site dans Chrome, puis autorise les capteurs ou utilise le cap théorique.';
+ },5000);
+}
 async function startCompass(){
- if(!window.isSecureContext){$('compassStatus').textContent='Un site HTTPS est requis pour accéder aux capteurs.';return}
- if(typeof DeviceOrientationEvent==='undefined'){$('compassStatus').textContent='Capteur d’orientation indisponible sur cet appareil.';return}
+ if(!window.isSecureContext){$('compassStatus').textContent='HTTPS nécessaire pour utiliser la boussole.';return}
+ if(typeof DeviceOrientationEvent==='undefined'){$('compassStatus').textContent='Boussole non prise en charge par ce navigateur. Cap théorique uniquement.';return}
  try{
-  if(typeof DeviceOrientationEvent.requestPermission==='function'){
-   const permission=await DeviceOrientationEvent.requestPermission(true);
-   if(permission!=='granted'){$('compassStatus').textContent='Accès aux capteurs refusé. Cap théorique affiché.';return}
-  }
-  if(!orientationStarted){window.addEventListener('deviceorientationabsolute',onOrientation,true);window.addEventListener('deviceorientation',onOrientation,true);orientationStarted=true}
-  $('compassStatus').textContent='Recherche d’un capteur magnétique absolu…';
-  setTimeout(()=>{if(!sensorLive)$('compassStatus').textContent='Capteur absolu indisponible. Utilise le cap théorique.'},3000);
- }catch(e){$('compassStatus').textContent='Autorisation des capteurs impossible.'}
+   if(typeof DeviceOrientationEvent.requestPermission==='function'){
+     let permission;
+     try{permission=await DeviceOrientationEvent.requestPermission(true)}
+     catch{permission=await DeviceOrientationEvent.requestPermission()}
+     if(permission!=='granted'){$('compassStatus').textContent='Capteurs non autorisés. Appuie sur Activer et autorise le mouvement.';return}
+   }
+   beginCompassListening();
+ }catch(e){ $('compassStatus').textContent='Accès au capteur refusé ou indisponible. Essaie directement dans Chrome.' }
+}
+// Chrome on Android does not normally need a user gesture, so start on load.
+// Browsers requiring a permission prompt continue to use the explicit button.
+function autoStartCompass(){
+ if(window.isSecureContext&&typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission!=='function')beginCompassListening();
 }
 function setModal(open){$('modalBackdrop').hidden=!open;document.body.style.overflow=open?'hidden':'';if(open)fillSettings()}
 function fillSettings(){
@@ -277,7 +302,7 @@ navButtons.forEach(button=>button.addEventListener('click',()=>{
  document.querySelector(type==='qibla'?'.qibla-section':'.hero').scrollIntoView({behavior:'smooth',block:'start'});
 }));
 document.addEventListener('keydown',e=>{if(e.key==='Escape')setModal(false)});
-updateData();setInterval(tick,1000);
+updateData();autoStartCompass();setInterval(tick,1000);
 if('serviceWorker' in navigator&&window.isSecureContext&&location.protocol!=='file:')window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 
 </script>
