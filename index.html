@@ -15,6 +15,29 @@
 .friday-panel{border:1px solid #655f43;background:#222f26;border-radius:13px;padding:13px;margin-top:10px;font-size:13px}.friday-panel[hidden]{display:none}.learn-card{margin-top:11px;background:#122e2a;border:1px solid #375649;border-radius:16px;padding:17px}.learn-card button{border:0;background:transparent;color:#f1d48d;font-size:15px;font-weight:750;padding:0}.learn-steps{margin-top:14px;color:#d5e4d9;font-size:13px;line-height:1.7}.learn-steps[hidden]{display:none}
 @media(max-width:380px){.hero h1{font-size:39px}.next-time{font-size:49px}.mosque-card{padding:11px}}
 .qibla-section[hidden],.learn-section[hidden]{display:none!important}.mosques-section .mosques-list:empty{display:none}
+
+.actions-modal{padding:18px 16px 12px;max-height:90dvh}
+.actions-modal .modal-heading h2{font-size:21px}
+.modal-context{color:#d0b77c;font-size:12px;margin:7px 0 2px}
+.fold-container{padding:8px 1px 12px}
+.action-fold{border:1px solid #496754;border-radius:16px;background:#193a30;margin:9px 0;overflow:hidden}
+.action-fold summary{list-style:none;display:flex;align-items:center;justify-content:space-between;padding:17px 15px;cursor:pointer;font-size:14px;font-weight:720;color:#f6f0dc;gap:10px}
+.action-fold summary::-webkit-details-marker{display:none}
+.action-fold summary strong{font-size:10px;margin-right:12px;color:#d5b877}
+.action-fold summary:focus-visible{outline:2px solid #deb97a;outline-offset:-3px}
+.fold-chevron{font-size:22px;line-height:1;color:#d8bd88;transition:transform .18s}
+.action-fold[open] .fold-chevron{transform:rotate(180deg)}
+.fold-body{padding:0 14px 16px}
+.fold-body .primary-button{margin:0 0 9px;font-size:13px}
+.fold-body .mini-note a{color:#e6cf96}
+.fold-body .mosques-section,.fold-body .qibla-section,.fold-body .learn-section{margin-top:0}
+.fold-body .mosque-header h2,.fold-body .learn-section h2,.fold-body .section-header h2{display:none}
+.fold-body .compass-card{padding:13px}
+.fold-body .compass-shell{width:min(54vw,215px)}
+.fold-body .bearing{font-size:22px}
+.fold-body .mosque-header{justify-content:flex-end}
+.fold-body .learn-card{margin:0}
+.fold-body .mosque-card{padding:11px}
 </style>
 <link rel="manifest" href="./manifest.webmanifest" />
 <link rel="icon" type="image/svg+xml" href="./icon.svg" />
@@ -25,27 +48,55 @@
 <header class="topbar"><div class="brand"><span class="brand-icon">✦</span><span>SALAT<small>PRIÈRE · QIBLA</small></span></div><button id="settingsOpen" class="icon-button" aria-label="Ouvrir les réglages" title="Réglages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06-1.89 1.89-.06-.06A1.65 1.65 0 0 0 16 18.4l-.08.02V21h-2.68v-.08A1.65 1.65 0 0 0 12 19.4a1.65 1.65 0 0 0-1.24.54V21H8.08v-2.58l-.08-.02a1.65 1.65 0 0 0-1.82.33l-.06.06-1.89-1.89.06-.06A1.65 1.65 0 0 0 4.6 15l-.02-.08H2v-2.68h2.58l.02-.08a1.65 1.65 0 0 0-.33-1.82l-.06-.06L6.1 8.39l.06.06A1.65 1.65 0 0 0 8 8.78l.08-.02V6.18h2.68v2.58A1.65 1.65 0 0 0 12 9.3a1.65 1.65 0 0 0 1.24-.54V6.18h2.68v2.58l.08.02a1.65 1.65 0 0 0 1.82-.33l.06-.06 1.89 1.89-.06.06a1.65 1.65 0 0 0-.33 1.82l.02.08H22v2.68h-2.58z" transform="translate(0 -1.6) scale(.93) translate(1 .7)"/></svg></button></header>
 <main>
 <div class="eyebrow-row"><button class="location" id="locationButton" title="Changer ou détecter la ville"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s7-7.5 7-12a7 7 0 1 0-14 0c0 4.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg><span id="cityLabel">Lyon, France</span><span class="tiny-arrow">⌄</span></button><span id="dateLabel" class="date-pill">—</span></div>
-<section class="hero" id="prayerHero" role="button" tabindex="0" aria-label="Ouvrir les actions pour la prochaine prière" aria-expanded="false" aria-controls="prayerActions"><div class="hero-decor" aria-hidden="true"><span class="moon">☪</span></div><p class="overline">PROCHAINE PRIÈRE</p><h1 id="nextName">—</h1><div class="next-time" id="nextTime">--:--</div><p class="countdown-title">DANS <strong id="countdown">-- h -- min</strong></p><div class="hero-footer">Appuie pour les actions</div></section>
+<section class="hero" id="prayerHero" role="button" tabindex="0" aria-label="Ouvrir les actions pour la prochaine prière" aria-haspopup="dialog" aria-expanded="false" aria-controls="actionsBackdrop"><div class="hero-decor" aria-hidden="true"><span class="moon">☪</span></div><p class="overline">PROCHAINE PRIÈRE</p><h1 id="nextName">—</h1><div class="next-time" id="nextTime">--:--</div><p class="countdown-title">DANS <strong id="countdown">-- h -- min</strong></p><div class="hero-footer">Appuie pour les actions</div></section>
 <div class="quick-actions"><button type="button" id="quickQibla">⌖ Qibla</button><button type="button" id="quickMosques">◈ Mosquées proches</button></div>
-<div id="prayerActions" class="prayer-actions" hidden>
-<button type="button" id="adhanPlay">▶ Écouter l’adhan</button>
-<button type="button" id="nearbyAction">⌖ Aller à une mosquée proche</button>
-<button type="button" id="qiblaAction">✧ Ouvrir la boussole</button>
-<p id="audioStatus" class="mini-note" role="status">Un appui : lecture. Un autre : pause. Encore un : reprise.</p>
-<small class="mini-note">Enregistrement libre CC0 : <a href="https://commons.wikimedia.org/wiki/File:Beautiful_adhan.ogg" target="_blank" rel="noopener noreferrer" style="color:#e5cd91">Adam-synagda / Wikimedia Commons</a>.</small>
-</div><audio id="adhanAudio" preload="none" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Beautiful_adhan.ogg"></audio>
 <div class="friday-panel" id="fridayPanel" hidden><strong>Vendredi · Joumou’a</strong><div>Les horaires du vendredi dépendent de chaque mosquée. Vérifie sa fiche avant de partir.</div></div>
 <section class="prayer-section"><div class="section-header"><h2>Les cinq prières</h2><span id="methodChip" class="method-chip">France · 12°</span></div><div class="prayers" id="prayers" aria-live="polite"></div><details style="margin-top:10px;color:#aabeb2;font-size:11px"><summary style="cursor:pointer">Source des horaires</summary><p class="micro-note" id="sourceNote">Horaires estimés par calcul astronomique, sans calendrier officiel de mosquée.</p></details></section>
-<section class="mosques-section" id="mosquesSection">
+<section class="privacy-strip"><span>♧</span><span>Sans compte. Tes coordonnées et tes réglages restent sur cet appareil.</span></section>
+</main>
+<nav class="bottom-nav" aria-label="Navigation"><button class="active" data-nav="prayer"><span>◷</span>Aujourd’hui</button><button data-nav="mosques"><span>⌖</span>Mosquées</button><button data-nav="learn"><span>☷</span>Apprendre</button></nav>
+</div>
+
+<div id="actionsBackdrop" class="modal-backdrop" hidden>
+  <section class="modal actions-modal" role="dialog" aria-modal="true" aria-labelledby="actionsTitle">
+    <div class="modal-heading"><h2 id="actionsTitle">Que veux-tu faire ?</h2><button type="button" id="actionsClose" class="close-button" aria-label="Fermer les actions">×</button></div>
+    <p class="modal-context" id="actionsPrayerName">Prière du moment</p>
+    <div class="modal-scroll fold-container">
+      <details class="action-fold" id="foldAdhan" name="salat-actions">
+        <summary><span><strong>01</strong> Écouter l’adhan</span><span class="fold-chevron">⌄</span></summary>
+        <div class="fold-body">
+          <button type="button" id="adhanPlay" class="primary-button">▶ Écouter l’adhan</button>
+          <p id="audioStatus" class="mini-note" role="status">Appuie pour écouter, mettre en pause ou reprendre.</p>
+          <small class="mini-note">Enregistrement <a href="https://commons.wikimedia.org/wiki/File:Beautiful_adhan.ogg" target="_blank" rel="noopener noreferrer">Adam-synagda / Wikimedia Commons (CC0)</a>.</small>
+        </div>
+      </details>
+      <details class="action-fold" id="foldMosques" name="salat-actions">
+        <summary><span><strong>02</strong> Aller à la mosquée</span><span class="fold-chevron">⌄</span></summary>
+        <div class="fold-body">
+          <section class="mosques-section" id="mosquesSection">
 <div class="mosque-header"><h2>Mosquées proches</h2><button type="button" id="locateMosques">Me localiser</button></div>
 <p class="mosque-subtitle" id="mosquesStatus">Localise-toi pour afficher les lieux de prière du plus proche au plus éloigné (rayon 8 km).</p>
 <div class="mosques-list" id="mosquesList" aria-live="polite"></div>
 <p class="micro-note">Données cartographiques © OpenStreetMap. L'iqama et l'horaire de Joumou’a ne sont indiqués que s’ils sont confirmés par une mosquée. Le GPS est transmis au service cartographique seulement sur demande.</p>
-</section><section class="qibla-section" id="qiblaSection" hidden><div class="section-header"><h2>Direction de la Qibla</h2><span class="method-chip"><span class="dot"></span> La Mecque</span></div><div class="compass-card"><div class="compass-shell" id="compassShell"><div class="compass-rose"><span class="n">N</span><span class="e">E</span><span class="s">S</span><span class="w">O</span><span class="compass-ticks"></span><div class="qibla-arrow" id="qiblaArrow"><span class="arrow-tip">◆</span><span class="arrow-shaft"></span></div><div class="compass-center">✦</div></div></div><strong class="bearing" id="bearing">—°</strong><p id="compassStatus" class="compass-status">Cap théorique depuis ta position</p><button class="secondary-button" id="compassButton">Activer la boussole du téléphone</button><p class="compass-hint">Pose le téléphone à plat, écran vers le ciel et éloigne les objets métalliques. La rose tourne si les capteurs sont disponibles. Sans nord fiable, la flèche est atténuée et ne doit pas servir à prier. Vérifie la direction avec une boussole de confiance : le capteur peut être perturbé.</p></div></section>
-<section class="learn-section" id="learnSection" hidden><h2>Apprendre à prier</h2><div class="learn-card"><button id="learnToggle" type="button" aria-expanded="false" aria-controls="learnSteps">Découvrir les étapes ▾</button><div id="learnSteps" class="learn-steps" hidden>Préparation · Ablutions · Déroulement · Paroles et récitations.<p>Un parcours guidé à développer ensemble, avec sources vérifiées.</p></div></div></section><section class="privacy-strip"><span>♧</span><span>Sans compte. Tes coordonnées et tes réglages restent sur cet appareil.</span></section>
-</main>
-<nav class="bottom-nav" aria-label="Navigation"><button class="active" data-nav="prayer"><span>◷</span>Aujourd’hui</button><button data-nav="mosques"><span>⌖</span>Mosquées</button><button data-nav="learn"><span>☷</span>Apprendre</button></nav>
+</section>
+        </div>
+      </details>
+      <details class="action-fold" id="foldQibla" name="salat-actions">
+        <summary><span><strong>03</strong> Trouver la Qibla</span><span class="fold-chevron">⌄</span></summary>
+        <div class="fold-body">
+          <section class="qibla-section" id="qiblaSection"><div class="section-header"><h2>Direction de la Qibla</h2><span class="method-chip"><span class="dot"></span> La Mecque</span></div><div class="compass-card"><div class="compass-shell" id="compassShell"><div class="compass-rose"><span class="n">N</span><span class="e">E</span><span class="s">S</span><span class="w">O</span><span class="compass-ticks"></span><div class="qibla-arrow" id="qiblaArrow"><span class="arrow-tip">◆</span><span class="arrow-shaft"></span></div><div class="compass-center">✦</div></div></div><strong class="bearing" id="bearing">—°</strong><p id="compassStatus" class="compass-status">Cap théorique depuis ta position</p><button class="secondary-button" id="compassButton">Activer la boussole du téléphone</button><p class="compass-hint">Pose le téléphone à plat, écran vers le ciel et éloigne les objets métalliques. La rose tourne si les capteurs sont disponibles. Sans nord fiable, la flèche est atténuée et ne doit pas servir à prier. Vérifie la direction avec une boussole de confiance : le capteur peut être perturbé.</p></div></section>
+        </div>
+      </details>
+      <details class="action-fold" id="foldLearn" name="salat-actions">
+        <summary><span><strong>04</strong> Apprendre à prier</span><span class="fold-chevron">⌄</span></summary>
+        <div class="fold-body">
+          <section class="learn-section" id="learnSection"><h2>Apprendre à prier</h2><div class="learn-card"><button id="learnToggle" type="button" aria-expanded="false" aria-controls="learnSteps">Découvrir les étapes ▾</button><div id="learnSteps" class="learn-steps" hidden>Préparation · Ablutions · Déroulement · Paroles et récitations.<p>Un parcours guidé à développer ensemble, avec sources vérifiées.</p></div></div></section>
+        </div>
+      </details>
+    </div>
+  </section>
 </div>
+<audio id="adhanAudio" preload="none" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Beautiful_adhan.ogg"></audio>
 <div id="modalBackdrop" class="modal-backdrop" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><div class="modal-heading"><h2 id="settingsTitle">Réglages</h2><button id="settingsClose" class="close-button" aria-label="Fermer">×</button></div><div class="modal-scroll"><p class="field-caption">POSITION</p><button class="wide-action" id="geoButton">⌖ Utiliser ma position GPS</button><div class="input-row"><label>Nom de la ville<input id="cityInput" maxlength="60" placeholder="Ex. Lyon" autocomplete="address-level2" /></label></div><div class="input-row double"><label>Latitude<input id="latInput" type="number" step="any" min="-90" max="90" /></label><label>Longitude<input id="lonInput" type="number" step="any" min="-180" max="180" /></label></div><p class="helper">Position initiale : Lyon. Le GPS n'est demandé qu'en appuyant sur le bouton.</p><p class="field-caption">CALCUL DES HORAIRES</p><label class="single">Méthode<select id="methodSelect"><option value="france">France · 12° / 12°</option><option value="mwl">Ligue islamique mondiale · 18° / 17°</option><option value="egypt">Autorité égyptienne · 19,5° / 17,5°</option><option value="karachi">Karachi · 18° / 18°</option><option value="makkah">Umm al-Qura · Isha +90 min</option></select></label><label class="single">Calcul de Asr<select id="madhabSelect"><option value="standard">Standard (Shafi / Maliki / Hanbali)</option><option value="hanafi">Hanafi</option></select></label><p class="helper">Les mosquées peuvent utiliser d'autres conventions ou ajustements manuels.</p><p class="field-caption">RAPPELS</p><label class="single">Alertes<select id="reminderModeSelect"><option value="off">Désactivées</option><option value="silent">Silencieuses (sans son)</option><option value="discreet">Discrètes (notification)</option><option value="adhan">Adhan (si la page est ouverte)</option></select></label><p class="helper">Pour des alertes fiables lorsque l'application est fermée, une version Android native sera nécessaire.</p><p class="status" id="settingsStatus" role="status"></p></div><button class="primary-button" id="saveSettings">Enregistrer mes réglages</button></section></div>
 <script>
 // Local astronomical estimates. Angles and conventions differ by mosque.
@@ -324,28 +375,39 @@ $('reminderModeSelect').onchange=async e=>{
  if(Notification.permission==='default'){try{await Notification.requestPermission();}catch{}}
  if(Notification.permission!=='granted')settingsMessage('Notifications système refusées. Change les autorisations du navigateur pour les activer.');
 };
-// Actions directes : l'heure est le bouton principal, le reste est secondaire.
-function jumpTo(selector){
- const area=document.querySelector(selector);
- if(area)area.scrollIntoView({behavior:'smooth',block:'start'});
+// All primary actions use one centered popup with a single open accordion.
+const actionsPanel=$('actionsBackdrop'),actionFolds=['foldAdhan','foldMosques','foldQibla','foldLearn'];
+let actionsReturnFocus=null;
+function closeActions(){
+ if(actionsPanel.hidden)return;
+ actionsPanel.hidden=true;
+ $('prayerHero').setAttribute('aria-expanded','false');
+ if($('modalBackdrop').hidden)document.body.style.overflow='';
+ actionsReturnFocus?.focus?.();
+ actionsReturnFocus=null;
 }
-function showQibla(){
- const section=$('qiblaSection');section.hidden=false;jumpTo('#qiblaSection');
+function openActions(section='adhan',trigger=null){
+ actionsReturnFocus=trigger||document.activeElement;
+ actionsPanel.hidden=false;
+ document.body.style.overflow='hidden';
+ $('prayerHero').setAttribute('aria-expanded','true');
+ $('actionsPrayerName').textContent=next?next.key==='fajr'?'Fajr · '+formatTime(next.time):(ITEMS.find(x=>x[0]===next.key)?.[1]||'Prière')+' · '+formatTime(next.time):'Actions de Salat';
+ const id={adhan:'foldAdhan',mosques:'foldMosques',qibla:'foldQibla',learn:'foldLearn'}[section]||'foldAdhan';
+ for(const foldId of actionFolds){$(foldId).open=foldId===id;}
+ $('actionsClose').focus();
 }
-function showLearn(){
- $('learnSection').hidden=false;jumpTo('#learnSection');
+for(const id of actionFolds){
+ $(id).addEventListener('toggle',()=>{
+  if(!$(id).open)return;
+  for(const other of actionFolds)if(other!==id)$(other).open=false;
+ });
 }
-function showMosques(){jumpTo('#mosquesSection');}
-function togglePrayerActions(){
- const panel=$('prayerActions');panel.hidden=!panel.hidden;
- $('prayerHero').setAttribute('aria-expanded',String(!panel.hidden));
-}
-$('prayerHero').onclick=togglePrayerActions;
-$('prayerHero').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();togglePrayerActions()}};
-$('quickQibla').onclick=showQibla;
-$('qiblaAction').onclick=showQibla;
-$('quickMosques').onclick=showMosques;
-$('nearbyAction').onclick=()=>{showMosques();if(!$('mosquesList').children.length)loadMosques()};
+$('actionsClose').onclick=closeActions;
+actionsPanel.onclick=e=>{if(e.target===actionsPanel)closeActions();};
+$('prayerHero').onclick=()=>openActions('adhan',$('prayerHero'));
+$('prayerHero').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openActions('adhan',$('prayerHero'));}};
+$('quickQibla').onclick=()=>openActions('qibla',$('quickQibla'));
+$('quickMosques').onclick=()=>openActions('mosques',$('quickMosques'));
 $('locateMosques').onclick=loadMosques;
 $('learnToggle').onclick=()=>{
  const details=$('learnSteps');details.hidden=!details.hidden;
@@ -421,11 +483,11 @@ const navButtons=document.querySelectorAll('.bottom-nav button');
 navButtons.forEach(button=>button.addEventListener('click',()=>{
  const type=button.dataset.nav;
  navButtons.forEach(b=>b.classList.toggle('active',b===button));
- if(type==='mosques'){showMosques();return}
- if(type==='learn'){showLearn();return}
- jumpTo('.hero');
+ if(type==='mosques'){openActions('mosques',button);return;}
+ if(type==='learn'){openActions('learn',button);return;}
+ document.querySelector('.hero').scrollIntoView({behavior:'smooth',block:'start'});
 }));
-document.addEventListener('keydown',e=>{if(e.key==='Escape')setModal(false)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeActions();setModal(false);}});
 updateData();autoStartCompass();setInterval(tick,1000);
 if('serviceWorker' in navigator&&window.isSecureContext&&location.protocol!=='file:')window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 
