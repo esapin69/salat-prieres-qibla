@@ -12,3 +12,7 @@ Les horaires sont des estimations astronomiques et peuvent différer de ceux de 
 Ce site statique n'utilise aucune API ni aucun service payant.
 
 Déploiement : GitHub Pages. Activer **Settings → Pages → Build and deployment → Source: GitHub Actions** pour publier avec le workflow fourni.
+
+## Publication
+
+Le site est publié depuis la branche `main` via le workflow GitHub Pages du dépôt Salat.
