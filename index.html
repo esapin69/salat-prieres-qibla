@@ -14,6 +14,7 @@
 .mosques-section,.learn-section{margin-top:30px}.mosque-header{display:flex;align-items:center;justify-content:space-between;gap:10px}.mosque-header h2,.learn-section h2{font-size:19px;margin:0}.mosque-header button{border-radius:999px;background:#2c5140;color:#fff;border:1px solid #617a64;padding:10px 13px}.mosque-subtitle{font-size:12px;color:#a1c1b3;line-height:1.6;margin:10px 0}.mosques-list{display:grid;gap:9px}.mosque-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border-radius:15px;background:#122d29;border:1px solid #34584c}.mosque-card strong{display:block;font-size:14px;line-height:1.4}.mosque-card small{display:block;color:#a7bcb1;font-size:11px;margin-top:6px}.mosque-card a{flex-shrink:0;color:#f0d48e;border:1px solid #64836b;padding:9px 11px;border-radius:10px;font-weight:700;text-decoration:none;font-size:12px}.pill-distance{color:#f0d48e;font-size:11px}
 .friday-panel{border:1px solid #655f43;background:#222f26;border-radius:13px;padding:13px;margin-top:10px;font-size:13px}.friday-panel[hidden]{display:none}.learn-card{margin-top:11px;background:#122e2a;border:1px solid #375649;border-radius:16px;padding:17px}.learn-card button{border:0;background:transparent;color:#f1d48d;font-size:15px;font-weight:750;padding:0}.learn-steps{margin-top:14px;color:#d5e4d9;font-size:13px;line-height:1.7}.learn-steps[hidden]{display:none}
 @media(max-width:380px){.hero h1{font-size:39px}.next-time{font-size:49px}.mosque-card{padding:11px}}
+.qibla-section[hidden],.learn-section[hidden]{display:none!important}.mosques-section .mosques-list:empty{display:none}
 </style>
 <link rel="manifest" href="./manifest.webmanifest" />
 <link rel="icon" type="image/svg+xml" href="./icon.svg" />
@@ -34,16 +35,16 @@
 <small class="mini-note">Enregistrement libre CC0 : <a href="https://commons.wikimedia.org/wiki/File:Beautiful_adhan.ogg" target="_blank" rel="noopener noreferrer" style="color:#e5cd91">Adam-synagda / Wikimedia Commons</a>.</small>
 </div><audio id="adhanAudio" preload="none" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Beautiful_adhan.ogg"></audio>
 <div class="friday-panel" id="fridayPanel" hidden><strong>Vendredi · Joumou’a</strong><div>Les horaires du vendredi dépendent de chaque mosquée. Vérifie sa fiche avant de partir.</div></div>
-<section class="prayer-section"><div class="section-header"><h2>Les cinq prières</h2><span id="methodChip" class="method-chip">France · 12°</span></div><div class="prayers" id="prayers" aria-live="polite"></div><p class="micro-note" id="sourceNote">Horaires estimés par calcul astronomique. Consulte les horaires de ta mosquée pour les écarts de convention.</p></section>
+<section class="prayer-section"><div class="section-header"><h2>Les cinq prières</h2><span id="methodChip" class="method-chip">France · 12°</span></div><div class="prayers" id="prayers" aria-live="polite"></div><details style="margin-top:10px;color:#aabeb2;font-size:11px"><summary style="cursor:pointer">Source des horaires</summary><p class="micro-note" id="sourceNote">Horaires estimés par calcul astronomique, sans calendrier officiel de mosquée.</p></details></section>
 <section class="mosques-section" id="mosquesSection">
 <div class="mosque-header"><h2>Mosquées proches</h2><button type="button" id="locateMosques">Me localiser</button></div>
 <p class="mosque-subtitle" id="mosquesStatus">Localise-toi pour afficher les lieux de prière du plus proche au plus éloigné (rayon 8 km).</p>
 <div class="mosques-list" id="mosquesList" aria-live="polite"></div>
 <p class="micro-note">Données cartographiques © OpenStreetMap. L'iqama et l'horaire de Joumou’a ne sont indiqués que s’ils sont confirmés par une mosquée. Le GPS est transmis au service cartographique seulement sur demande.</p>
-</section><section class="qibla-section" id="qiblaSection"><div class="section-header"><h2>Direction de la Qibla</h2><span class="method-chip"><span class="dot"></span> La Mecque</span></div><div class="compass-card"><div class="compass-shell" id="compassShell"><div class="compass-rose"><span class="n">N</span><span class="e">E</span><span class="s">S</span><span class="w">O</span><span class="compass-ticks"></span><div class="qibla-arrow" id="qiblaArrow"><span class="arrow-tip">◆</span><span class="arrow-shaft"></span></div><div class="compass-center">✦</div></div></div><strong class="bearing" id="bearing">—°</strong><p id="compassStatus" class="compass-status">Cap théorique depuis ta position</p><button class="secondary-button" id="compassButton">Activer la boussole du téléphone</button><p class="compass-hint">Pose le téléphone à plat, écran vers le ciel et éloigne les objets métalliques. La rose tourne si les capteurs sont disponibles. Sans nord fiable, la flèche est atténuée et ne doit pas servir à prier. Vérifie la direction avec une boussole de confiance : le capteur peut être perturbé.</p></div></section>
-<section class="learn-section" id="learnSection"><h2>Apprendre à prier</h2><div class="learn-card"><button id="learnToggle" type="button" aria-expanded="false" aria-controls="learnSteps">Découvrir les étapes ▾</button><div id="learnSteps" class="learn-steps" hidden>Préparation · Ablutions · Déroulement · Paroles et récitations.<p>Un parcours guidé à développer ensemble, avec sources vérifiées.</p></div></div></section><section class="privacy-strip"><span>♧</span><span>Sans compte. Tes coordonnées et tes réglages restent sur cet appareil.</span></section>
+</section><section class="qibla-section" id="qiblaSection" hidden><div class="section-header"><h2>Direction de la Qibla</h2><span class="method-chip"><span class="dot"></span> La Mecque</span></div><div class="compass-card"><div class="compass-shell" id="compassShell"><div class="compass-rose"><span class="n">N</span><span class="e">E</span><span class="s">S</span><span class="w">O</span><span class="compass-ticks"></span><div class="qibla-arrow" id="qiblaArrow"><span class="arrow-tip">◆</span><span class="arrow-shaft"></span></div><div class="compass-center">✦</div></div></div><strong class="bearing" id="bearing">—°</strong><p id="compassStatus" class="compass-status">Cap théorique depuis ta position</p><button class="secondary-button" id="compassButton">Activer la boussole du téléphone</button><p class="compass-hint">Pose le téléphone à plat, écran vers le ciel et éloigne les objets métalliques. La rose tourne si les capteurs sont disponibles. Sans nord fiable, la flèche est atténuée et ne doit pas servir à prier. Vérifie la direction avec une boussole de confiance : le capteur peut être perturbé.</p></div></section>
+<section class="learn-section" id="learnSection" hidden><h2>Apprendre à prier</h2><div class="learn-card"><button id="learnToggle" type="button" aria-expanded="false" aria-controls="learnSteps">Découvrir les étapes ▾</button><div id="learnSteps" class="learn-steps" hidden>Préparation · Ablutions · Déroulement · Paroles et récitations.<p>Un parcours guidé à développer ensemble, avec sources vérifiées.</p></div></div></section><section class="privacy-strip"><span>♧</span><span>Sans compte. Tes coordonnées et tes réglages restent sur cet appareil.</span></section>
 </main>
-<nav class="bottom-nav" aria-label="Navigation"><button class="active" data-nav="prayer"><span>◷</span>Prières</button><button data-nav="qibla"><span>⌖</span>Qibla</button><button data-nav="settings"><span>⚙</span>Réglages</button></nav>
+<nav class="bottom-nav" aria-label="Navigation"><button class="active" data-nav="prayer"><span>◷</span>Aujourd’hui</button><button data-nav="mosques"><span>⌖</span>Mosquées</button><button data-nav="learn"><span>☷</span>Apprendre</button></nav>
 </div>
 <div id="modalBackdrop" class="modal-backdrop" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><div class="modal-heading"><h2 id="settingsTitle">Réglages</h2><button id="settingsClose" class="close-button" aria-label="Fermer">×</button></div><div class="modal-scroll"><p class="field-caption">POSITION</p><button class="wide-action" id="geoButton">⌖ Utiliser ma position GPS</button><div class="input-row"><label>Nom de la ville<input id="cityInput" maxlength="60" placeholder="Ex. Lyon" autocomplete="address-level2" /></label></div><div class="input-row double"><label>Latitude<input id="latInput" type="number" step="any" min="-90" max="90" /></label><label>Longitude<input id="lonInput" type="number" step="any" min="-180" max="180" /></label></div><p class="helper">Position initiale : Lyon. Le GPS n'est demandé qu'en appuyant sur le bouton.</p><p class="field-caption">CALCUL DES HORAIRES</p><label class="single">Méthode<select id="methodSelect"><option value="france">France · 12° / 12°</option><option value="mwl">Ligue islamique mondiale · 18° / 17°</option><option value="egypt">Autorité égyptienne · 19,5° / 17,5°</option><option value="karachi">Karachi · 18° / 18°</option><option value="makkah">Umm al-Qura · Isha +90 min</option></select></label><label class="single">Calcul de Asr<select id="madhabSelect"><option value="standard">Standard (Shafi / Maliki / Hanbali)</option><option value="hanafi">Hanafi</option></select></label><p class="helper">Les mosquées peuvent utiliser d'autres conventions ou ajustements manuels.</p><p class="field-caption">RAPPELS</p><label class="single">Alertes<select id="reminderModeSelect"><option value="off">Désactivées</option><option value="silent">Silencieuses (sans son)</option><option value="discreet">Discrètes (notification)</option><option value="adhan">Adhan (si la page est ouverte)</option></select></label><p class="helper">Pour des alertes fiables lorsque l'application est fermée, une version Android native sera nécessaire.</p><p class="status" id="settingsStatus" role="status"></p></div><button class="primary-button" id="saveSettings">Enregistrer mes réglages</button></section></div>
 <script>
@@ -153,10 +154,10 @@ function getNextPrayer(now, today, tomorrow) {
 
 const $=id=>document.getElementById(id);
 const ITEMS=[['fajr','Fajr','Aube','☽'],['dhuhr','Dhuhr','Midi','☼'],['asr','Asr','Après-midi','◌'],['maghrib','Maghrib','Coucher du soleil','◒'],['isha','Isha','Nuit','☾']];
-const DEFAULTS={city:'Lyon, France',lat:45.7578,lon:4.8320,method:'france',madhab:'standard',notify:false};
+const DEFAULTS={city:'Lyon, France',lat:45.7578,lon:4.8320,method:'france',madhab:'standard',notify:false,notifyMode:'off'};
 let saved={};try{saved=JSON.parse(localStorage.getItem('salat-settings-v1'))||{}}catch{}
 let state={...DEFAULTS,...saved};
-const cleanState=(value)=>({city:String(value.city||DEFAULTS.city).slice(0,60),lat:Number(value.lat),lon:Number(value.lon),method:METHODS[value.method]?value.method:DEFAULTS.method,madhab:value.madhab==='hanafi'?'hanafi':'standard',notify:!!value.notify});
+const cleanState=(value)=>({city:String(value.city||DEFAULTS.city).slice(0,60),lat:Number(value.lat),lon:Number(value.lon),method:METHODS[value.method]?value.method:DEFAULTS.method,madhab:value.madhab==='hanafi'?'hanafi':'standard',notify:!!value.notify,notifyMode:['off','silent','discreet','adhan'].includes(value.notifyMode)?value.notifyMode:(value.notify?'discreet':'off')});
 state=cleanState(state);
 if(!Number.isFinite(state.lat)||Math.abs(state.lat)>90||!Number.isFinite(state.lon)||Math.abs(state.lon)>180)state={...DEFAULTS};
 let today=null,tomorrow=null,next=null,bearing=null,heading=null,sensorLive=false,notified=new Set(),lastDay='';
@@ -171,6 +172,7 @@ function updateData(){
  bearing=qiblaBearing(state.lat,state.lon);heading=null;sensorLive=false;sensorMode='none';
  $('cityLabel').textContent=state.city;
  $('dateLabel').textContent=dateFmt.format(now);
+ $('fridayPanel').hidden=now.getDay()!==5;
  $('methodChip').textContent=METHODS[state.method].label.split(' / ')[0];
  $('sourceNote').textContent=`${METHODS[state.method].desc} Horaires astronomiques approximatifs (écart de plusieurs minutes possible). Le programme utilise le fuseau horaire de ce téléphone. Pour prier, vérifie avec le calendrier de ta mosquée.`;
  $('bearing').textContent=`${Math.round(bearing)}° depuis le nord`;
@@ -205,9 +207,18 @@ function tick(){
  const sec=Math.max(0,Math.ceil((next.time.getTime()-now.getTime())/1000));
  const hr=Math.floor(sec/3600),min=Math.floor((sec%3600)/60),seconds=sec%60;
  $('countdown').textContent=hr?`${hr} h ${String(min).padStart(2,'0')} min`:`${min} min ${String(seconds).padStart(2,'0')} s`;
- if(state.notify&&typeof Notification!=='undefined'&&Notification.permission==='granted'){
+ if(state.notifyMode!=='off'){
   for(const [key] of ITEMS){const when=today[key];if(!when)continue;const delta=now-when;const tag=`${dateKey(now)}-${key}`;
-   if(delta>=0&&delta<65000&&!notified.has(tag)){notified.add(tag);new Notification(`Prière de ${ITEMS.find(i=>i[0]===key)[1]}`,{body:`Il est ${formatTime(when)}.`,tag});}
+   if(delta>=0&&delta<65000&&!notified.has(tag)){
+    notified.add(tag);
+    if(state.notifyMode==='adhan') {
+      if(document.visibilityState==='visible') playAdhanFromAlert();
+      else $('audioStatus').textContent='Adhan non joué en arrière-plan : ouvre Salat pour écouter.';
+    }
+    if(typeof Notification!=='undefined'&&Notification.permission==='granted'){
+      try{new Notification(`Prière de ${ITEMS.find(i=>i[0]===key)[1]}`,{body:`Il est ${formatTime(when)} (horaire calculé).`,tag,silent:state.notifyMode!=='discreet'});}catch{}
+    }
+   }
   }
  }
 }
@@ -279,14 +290,14 @@ function autoStartCompass(){
 function setModal(open){$('modalBackdrop').hidden=!open;document.body.style.overflow=open?'hidden':'';if(open)fillSettings()}
 function fillSettings(){
  $('cityInput').value=state.city;$('latInput').value=state.lat;$('lonInput').value=state.lon;
- $('methodSelect').value=state.method;$('madhabSelect').value=state.madhab;$('notificationToggle').checked=state.notify;
+ $('methodSelect').value=state.method;$('madhabSelect').value=state.madhab;$('reminderModeSelect').value=state.notifyMode;
  $('settingsStatus').textContent='';
 }
 function settingsMessage(message){$('settingsStatus').textContent=message}
 function saveSettings(){
  const lat=Number($('latInput').value),lon=Number($('lonInput').value);
  if(!$('latInput').value.trim()||!$('lonInput').value.trim()||!Number.isFinite(lat)||Math.abs(lat)>90||!Number.isFinite(lon)||Math.abs(lon)>180){settingsMessage('Vérifie la latitude (−90 à 90) et la longitude (−180 à 180).');return}
- state=cleanState({city:$('cityInput').value.trim()||'Position personnalisée',lat,lon,method:$('methodSelect').value,madhab:$('madhabSelect').value,notify:$('notificationToggle').checked});
+ state=cleanState({city:$('cityInput').value.trim()||'Position personnalisée',lat,lon,method:$('methodSelect').value,madhab:$('madhabSelect').value,notifyMode:$('reminderModeSelect').value});
  localStorage.setItem('salat-settings-v1',JSON.stringify(state));
  notified.clear();setModal(false);updateData();
 }
@@ -306,21 +317,113 @@ $('modalBackdrop').onclick=e=>{if(e.target===$('modalBackdrop'))setModal(false)}
 $('geoButton').onclick=geolocate;
 $('saveSettings').onclick=saveSettings;
 $('compassButton').onclick=startCompass;
-$('notificationToggle').onchange=async e=>{
- if(e.target.checked){
-  if(typeof Notification==='undefined'||!window.isSecureContext){e.target.checked=false;settingsMessage('Les notifications ne sont pas disponibles ici.');return}
-  if(Notification.permission!=='granted'){
-   const result=await Notification.requestPermission();
-   if(result!=='granted'){e.target.checked=false;settingsMessage('Autorisation refusée.');}
-  }
- }
+$('reminderModeSelect').onchange=async e=>{
+ if(e.target.value==='off')return;
+ if(e.target.value==='adhan')settingsMessage('Lecture automatique possible seulement si le navigateur l’autorise et que la page reste ouverte.');
+ if(typeof Notification==='undefined'||!window.isSecureContext){settingsMessage('Notifications système indisponibles sur ce navigateur.');return;}
+ if(Notification.permission==='default'){try{await Notification.requestPermission();}catch{}}
+ if(Notification.permission!=='granted')settingsMessage('Notifications système refusées. Change les autorisations du navigateur pour les activer.');
 };
+// Actions directes : l'heure est le bouton principal, le reste est secondaire.
+function jumpTo(selector){
+ const area=document.querySelector(selector);
+ if(area)area.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function showQibla(){
+ const section=$('qiblaSection');section.hidden=false;jumpTo('#qiblaSection');
+}
+function showLearn(){
+ $('learnSection').hidden=false;jumpTo('#learnSection');
+}
+function showMosques(){jumpTo('#mosquesSection');}
+function togglePrayerActions(){
+ const panel=$('prayerActions');panel.hidden=!panel.hidden;
+ $('prayerHero').setAttribute('aria-expanded',String(!panel.hidden));
+}
+$('prayerHero').onclick=togglePrayerActions;
+$('prayerHero').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();togglePrayerActions()}};
+$('quickQibla').onclick=showQibla;
+$('qiblaAction').onclick=showQibla;
+$('quickMosques').onclick=showMosques;
+$('nearbyAction').onclick=()=>{showMosques();if(!$('mosquesList').children.length)loadMosques()};
+$('locateMosques').onclick=loadMosques;
+$('learnToggle').onclick=()=>{
+ const details=$('learnSteps');details.hidden=!details.hidden;
+ $('learnToggle').setAttribute('aria-expanded',String(!details.hidden));
+};
+const adhan=$('adhanAudio');
+function audioState(){
+ $('adhanPlay').textContent=adhan.paused?'▶ Écouter l’adhan':'Ⅱ Mettre en pause';
+}
+async function playAdhanFromAlert(){
+ try{await adhan.play();audioState()}catch{$('audioStatus').textContent='Lecture automatique bloquée par le navigateur. Appuie sur Écouter.';}
+}
+$('adhanPlay').onclick=async()=>{
+ if(!adhan.paused){adhan.pause();audioState();return}
+ try{await adhan.play();$('audioStatus').textContent='Adhan en écoute. Appuie de nouveau pour la pause.'}
+ catch{$('audioStatus').textContent='Audio indisponible. Vérifie la connexion et ouvre la source pour écouter.'}
+ audioState();
+};
+adhan.onpause=audioState;
+adhan.onended=()=>{audioState();$('audioStatus').textContent='Écoute terminée.'};
+adhan.onerror=()=>{$('audioStatus').textContent='Enregistrement indisponible : consulte le lien Wikimedia Commons.'};
+function distanceKm(a,b,x,y){
+ const R=6371,lat=rad(x-a),lon=rad(y-b);
+ const q=Math.sin(lat/2)**2+Math.cos(rad(a))*Math.cos(rad(x))*Math.sin(lon/2)**2;
+ return R*2*Math.atan2(Math.sqrt(q),Math.sqrt(Math.max(0,1-q)));
+}
+function showMosqueError(message){
+ $('mosquesStatus').textContent=message;
+}
+async function loadMosques(){
+ if(!navigator.geolocation){showMosqueError('GPS indisponible : recherche des mosquées impossible.');return}
+ showMosqueError('Recherche des mosquées autour de toi…');
+ $('mosquesList').replaceChildren();
+ try{
+  const pos=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:false,maximumAge:120000,timeout:12000}));
+  const lat=pos.coords.latitude,lon=pos.coords.longitude;
+  if(!Number.isFinite(lat)||!Number.isFinite(lon))throw Error('coordonnées GPS invalides');
+  // Overpass read-only; explicit opt-in. No mosque-specific prayer times are fabricated.
+  const query='[out:json][timeout:15];(nwr["amenity"="place_of_worship"]["religion"="muslim"](around:8000,'+lat+','+lon+'););out center 120;';
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),18000);
+  let data;
+  try{
+   const response=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'data='+encodeURIComponent(query),signal:controller.signal});
+   if(!response.ok)throw Error('cartographie temporairement indisponible');
+   data=await response.json();
+  }finally{clearTimeout(timer)}
+  const unique=new Set();
+  const records=(Array.isArray(data.elements)?data.elements:[]).map(p=>{
+   const name=String(p.tags?.name||p.tags?.['name:fr']||'Lieu de prière sans nom');
+   const lat2=Number(p.lat??p.center?.lat),lon2=Number(p.lon??p.center?.lon);
+   if(!Number.isFinite(lat2)||!Number.isFinite(lon2))return null;
+   return {name,lat:lat2,lon:lon2,distance:distanceKm(lat,lon,lat2,lon2)};
+  }).filter(Boolean).sort((a,b)=>a.distance-b.distance).filter(p=>{
+   const key=p.name.toLowerCase()+'-'+p.lat.toFixed(3)+'-'+p.lon.toFixed(3);
+   if(unique.has(key))return false;unique.add(key);return true;
+  }).slice(0,3);
+  if(!records.length){showMosqueError('Aucune mosquée répertoriée dans les 8 km. Les données cartographiques peuvent être incomplètes.');return;}
+  showMosqueError('Les '+records.length+' lieux les plus proches répertoriés. Horaires de prière du lieu : non vérifiés.');
+  for(const place of records){
+   const card=document.createElement('article');card.className='mosque-card';
+   const info=document.createElement('div'),title=document.createElement('strong'),detail=document.createElement('small');
+   title.textContent=place.name;
+   detail.textContent=place.distance.toFixed(1)+' km à vol d’oiseau · horaires locaux non vérifiés';
+   info.append(title,detail);
+   const link=document.createElement('a');
+   link.href='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(place.lat+','+place.lon)+'&travelmode=walking';
+   link.target='_blank';link.rel='noopener noreferrer';link.textContent='Itinéraire ↗';
+   card.append(info,link);$('mosquesList').append(card);
+  }
+ }catch(error){showMosqueError(error?.code===1?'Position refusée. Autorise la localisation pour trouver les mosquées.':'Recherche indisponible actuellement. Réessaie dans quelques instants.');}
+}
 const navButtons=document.querySelectorAll('.bottom-nav button');
 navButtons.forEach(button=>button.addEventListener('click',()=>{
  const type=button.dataset.nav;
- if(type==='settings'){setModal(true);return}
  navButtons.forEach(b=>b.classList.toggle('active',b===button));
- document.querySelector(type==='qibla'?'.qibla-section':'.hero').scrollIntoView({behavior:'smooth',block:'start'});
+ if(type==='mosques'){showMosques();return}
+ if(type==='learn'){showLearn();return}
+ jumpTo('.hero');
 }));
 document.addEventListener('keydown',e=>{if(e.key==='Escape')setModal(false)});
 updateData();autoStartCompass();setInterval(tick,1000);
